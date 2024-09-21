@@ -1,15 +1,23 @@
-import { Router, createCors } from 'itty-router'
+import { Router, createCors, json } from 'itty-router'
 
 import { Env } from './env'
 import { getCcipRead, getName, getNames, setName } from './handlers'
+import { postCcipRead } from './handlers/postCcipRead'
 
-const { preflight, corsify } = createCors()
+const { preflight, corsify } = createCors({
+  origins: ['*'],
+  // allowHeaders: ['Content-Type'],
+  allowMethods: ['GET', 'POST'],
+})
 const router = Router()
 
 router
   .all('*', preflight)
   .get('/lookup/:sender/:data.json', (request, env) =>
     getCcipRead(request, env)
+  )
+  .post('/lookup/:sender', (request, env) =>
+    postCcipRead(request, env)
   )
   .get('/get/:name', (request, env) => getName(request, env))
   .get('/names', (request, env) => getNames(env))

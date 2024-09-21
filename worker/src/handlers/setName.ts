@@ -10,6 +10,8 @@ export async function setName(request: IRequest, env: Env): Promise<Response> {
   const body = await request.json()
   const safeParse = ZodNameWithSignature.safeParse(body)
 
+  console.log('setName', safeParse);
+
   if (!safeParse.success) {
     const response = { success: false, error: safeParse.error }
     return Response.json(response, { status: 400 })
@@ -54,6 +56,8 @@ export async function setName(request: IRequest, env: Env): Promise<Response> {
 
   // If the name is owned by someone else, return an error
   if (existingName && existingName.owner !== owner) {
+    console.log('existingName',  existingName?.owner);
+    
     const response = { success: false, error: 'Name already taken' }
     return Response.json(response, { status: 409 })
   }

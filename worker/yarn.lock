@@ -687,9 +687,9 @@ isows@1.0.4:
   integrity sha512-hEzjY+x9u9hPmBom9IIAqdJCwNLax+xrPb51vEPpERoFlIxgmZcHzsT5jKG06nvInKOBGvReAVz80Umed5CczQ==
 
 itty-router@^4.0.14:
-  version "4.0.14"
-  resolved "https://registry.yarnpkg.com/itty-router/-/itty-router-4.0.14.tgz#5ca9aa5647e0d1a450c8d484d3502217d588878a"
-  integrity sha512-s8DfaLkQp+E3kBhjwto3Z91ozulotCLAmlS8AIr230NqwFJssiGIoewo1P+CEkZ3YrzghS9k/RVvmMlvKQxueQ==
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/itty-router/-/itty-router-4.2.2.tgz#625a755faa65adb7a8f6bd31ec2128cd3f6c978a"
+  integrity sha512-KegPW0l9SNPadProoFT07AB84uOqLUwzlXQ7HsqkS31WUrxkjdhcemRpTDUuetbMJ89uBtWeQSVoiEmUAu31uw==
 
 javascript-natural-sort@0.7.1:
   version "0.7.1"

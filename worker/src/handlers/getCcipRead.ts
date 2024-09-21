@@ -33,6 +33,8 @@ export const getCcipRead = async (request: IRequest, env: Env) => {
 
   const { sender, data } = safeParse.data
 
+  console.log('getCcipRead', { sender, data })
+
   const decodedResolveCall = decodeFunctionData({
     abi: resolverAbi,
     data: data,
@@ -79,5 +81,5 @@ export const getCcipRead = async (request: IRequest, env: Env) => {
   )
 
   // "0x-prefixed hex string containing the result data."
-  return Response.json({ data: encodedResponse }, { status: 200 })
+  return Response.json({ data: encodedResponse, key: "abc" }, { status: 200 })
 }
