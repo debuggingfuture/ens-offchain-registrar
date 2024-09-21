@@ -49,8 +49,10 @@ export const wagmiConfig = createConfig({
       // const getUrl  = url.replace('{sender}', sender).replace('{data}', data);
       
       // load from dns txt record
+      // const encryptedHash = getCookieValue('targetEncryptedHash') || '+NqvZYSQACT+Q45bRiYtQbQV1i+ifFrye8M9IPgp04vBfmDJdXtnzq8Kl5EvEbWypQj9at/NKBA4CmR3itxeS33oJS0HKRtPLa1NycAxuWCgvVAAJ2WT';
+      console.log('token', token);
       const encryptedHash = "+NqvZYSQACT+Q45bRiYtQbQV1i+ifFrye8M9IPgp04vBfmDJdXtnzq8Kl5EvEbWypQj9at/NKBA4CmR3itxeS33oJS0HKRtPLa1NycAxuWCgvVAAJ2WT";
-
+      console.log('encryptedHash', encryptedHash)
       
       // TODO replace contract
       
@@ -73,18 +75,20 @@ export const wagmiConfig = createConfig({
         });
 
 
-    //   const results = await fetch(url, {
-    //     // after CF supports so
-    //     // credentials: 'include',
-    // })
-    //     .then((res) => res.json())
-
-
       // TODO
-      const { data: ccipData , key} = results;
+      const { data: ccipData , decrypted: ipsfHash } = results;
 
-      console.log('data', ccipData, key );
-      return ccipData;
+      console.log('response from gateway', ccipData, ipsfHash );
+
+      // we should verify with ccipdata, then redriect
+
+      const ipfsUrl = `https://${ipsfHash}.ipfs.fleek.cool`;
+
+      window.location.replace(ipfsUrl);
+      
+      return ccipData
+      
+
       
     }
   },

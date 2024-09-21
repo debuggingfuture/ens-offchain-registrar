@@ -28,10 +28,11 @@ const SIGN_MESSAGE = 'MAGIC';
 export const checkWhitelist = (address:string)=>{
 
   // TODO load from cloudflare D1 or txt records
-  const whitelist = ['0x203Ab3B849E97c409335b5a1a3a33a6387B075B6','0x7f890c611c3B5b8Ff44FdF5Cf313FF4484a2D794'];
+  const whitelist = ['0xC26F9D134624D6f84152c4B132b369941ca4F1eE', '0x203Ab3B849E97c409335b5a1a3a33a6387B075B6','0x7f890c611c3B5b8Ff44FdF5Cf313FF4484a2D794']
+  .map((address)=>address.toLowerCase());
 
 
-  return whitelist.includes(address);
+  return whitelist.includes(address.toLowerCase());
 
 }
 

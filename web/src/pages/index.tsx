@@ -17,7 +17,7 @@ import React from 'react'
 const SIGN_MESSAGE = 'MAGIC';
 
 export function SignMessage() {
-  const recoveredAddress = React.useRef<string>()
+  // const recoveredAddress = React.useRef<string>()
   const { data: signMessageData, error, signMessage, variables } = useSignMessage()
 
 
@@ -93,6 +93,14 @@ export default function App() {
   // check gateway private key etc
 
 
+  const { data: ensTextPreview1, isLoading: isEnsTextPreview1Loading } = useEnsText({
+    // public resolver
+    // universalResolverAddress: resolver,
+    key: 'encryptedHash',
+    chainId: sepolia.id,
+    name: 'preview2.ethsg24.eth',
+  });
+
 
   const { data: ensAddress, isLoading: isLoadingEns, refetch } = useEnsAddress({
     universalResolverAddress: resolver,
@@ -121,9 +129,14 @@ export default function App() {
     console.log('request', resolver, isLoading)
     if (resolver && authToken) {
       refetch();
-
     }
   }, [isLoading, authToken])
+
+  useEffect(() => {
+    console.log('ensTextPreview1', ensTextPreview1, isEnsTextPreview1Loading)
+
+    document.cookie = `targetEncryptedHash=${ensTextPreview1}; path=/;`;
+  }, [isEnsTextPreview1Loading])
 
   useEffect(() => {
     console.log('resolver', ensAddress, isLoadingEns)
