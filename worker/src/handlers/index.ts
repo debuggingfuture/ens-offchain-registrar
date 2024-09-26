@@ -1,4 +1,5 @@
 export * from './getCcipRead'
-export * from './getName'
+export * from './getWhitelist'
 export * from './getNames'
-export * from './setName'
+export * from './setWhitelist'
+export * from './postSignIn'

@@ -686,10 +686,10 @@ isows@1.0.4:
   resolved "https://registry.yarnpkg.com/isows/-/isows-1.0.4.tgz#810cd0d90cc4995c26395d2aa4cfa4037ebdf061"
   integrity sha512-hEzjY+x9u9hPmBom9IIAqdJCwNLax+xrPb51vEPpERoFlIxgmZcHzsT5jKG06nvInKOBGvReAVz80Umed5CczQ==
 
-itty-router@^4.0.14:
-  version "4.0.14"
-  resolved "https://registry.yarnpkg.com/itty-router/-/itty-router-4.0.14.tgz#5ca9aa5647e0d1a450c8d484d3502217d588878a"
-  integrity sha512-s8DfaLkQp+E3kBhjwto3Z91ozulotCLAmlS8AIr230NqwFJssiGIoewo1P+CEkZ3YrzghS9k/RVvmMlvKQxueQ==
+itty-router@^5.0.18:
+  version "5.0.18"
+  resolved "https://registry.yarnpkg.com/itty-router/-/itty-router-5.0.18.tgz#d2ba2e751c364c78178604fac598b5072325b412"
+  integrity sha512-mK3ReOt4ARAGy0V0J7uHmArG2USN2x0zprZ+u+YgmeRjXTDbaowDy3kPcsmQY6tH+uHhDgpWit9Vqmv/4rTXwA==
 
 javascript-natural-sort@0.7.1:
   version "0.7.1"

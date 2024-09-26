@@ -7,7 +7,18 @@ This is a fork to
 
 
 ### Motivation
+
+
 Part of experiment during [ETHGlobal SG](https://ethglobal.com/showcase/geist-x3fur)
+When I first read CCIP, I'm interested at the security considerations as contract could actually trigger client (browser) to fire HTTP request
+
+Generally, attackers will not be able to retrieve cookies not under gateway url. Only if ccip read function is override in viem.
+
+generic, trusted (ipfs) gateway.
+
+trusted redirect
+
+
 - whitelist mechanisms
   - onchain
     - ENS TXT
@@ -19,11 +30,18 @@ Part of experiment during [ETHGlobal SG](https://ethglobal.com/showcase/geist-x3
  - CCIP gateway for other records
 - cross-domain cookies
 
-Trust assumption is gateway properly decrypt and return valid content.
-Consider use of TEE/ decentralization / chainlink functions for trustless execution.
-
 
 Major modifications are highlighted in bold
+
+- Upgrade wagmi v2 for useEnsText
+- Upgrade itty v5 for better cookies support
+
+
+## Trust assumption
+It is assumed gateway properly decrypt and return valid content, which can be verified by resolver. 
+For decentralization, consider use of TEE/ decentralization / chainlink functions for trustless execution.
+
+
 
 ----
 

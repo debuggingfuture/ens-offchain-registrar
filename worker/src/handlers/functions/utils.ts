@@ -2,6 +2,8 @@ import { Insertable, Selectable } from 'kysely'
 
 import { Name, NameInKysely } from '../../models'
 
+export const DB_NAME = 'whitelist';
+
 type SelectableKysely = Selectable<NameInKysely>
 type InsertableKysely = Insertable<NameInKysely>
 
@@ -51,10 +53,7 @@ export function stringifyNameForDb(
   function stringifyName(name: Name) {
     return {
       name: name.name,
-      owner: name.owner,
       addresses: name.addresses ? JSON.stringify(name.addresses) : null,
-      texts: name.texts ? JSON.stringify(name.texts) : null,
-      contenthash: name.contenthash || null,
       updatedAt: new Date().toISOString(),
     }
   }

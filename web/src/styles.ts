@@ -1,7 +1,7 @@
 import {
   Card as ThorinCard,
   Helper as ThorinHelper,
-  mq,
+
 } from '@ensdomains/thorin'
 import styled, { css } from 'styled-components'
 
@@ -43,7 +43,5 @@ export const Spacer = styled.div`
   width: 100%;
   height: 1rem;
 
-  ${mq.sm.max(css`
-    height: 0;
-  `)}
+
 `

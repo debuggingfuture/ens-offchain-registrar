@@ -1,66 +1,91 @@
-import { Button, Input } from '@ensdomains/thorin'
+import { Button, DotGridSVG, Dropdown, ExitSVG, Input } from '@ensdomains/thorin'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import Head from 'next/head'
-import { useState } from 'react'
-import { useAccount, useSignMessage } from 'wagmi'
+import { useEffect, useState } from 'react'
+import { useAccount, useEnsName, useEnsResolver, useEnsText, useSignMessage } from 'wagmi'
+import { normalize } from 'viem/ens'
 
 import { Footer } from '@/components/Footer'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useFetch } from '@/hooks/useFetch'
 import { Card, Form, Helper, Link, Spacer } from '@/styles'
 import { WorkerRequest } from '@/types'
+import { DropdownItem } from '@ensdomains/thorin/dist/types/components/molecules/Dropdown/Dropdown'
+import { sepolia } from 'viem/chains'
+import { useAddWhitelist, useAuth } from '@/hooks/gateway'
 
 export default function App() {
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
 
-  const [name, setName] = useState<string | undefined>(undefined)
   const [description, setDescription] = useState<string | undefined>(undefined)
-  const [baseAddress, setBaseAddress] = useState<string | undefined>(address)
-  const [arbAddress, setArbAddress] = useState<string | undefined>(address)
 
-  const regex = new RegExp('^[a-z0-9-]+$')
-  const debouncedName = useDebounce(name, 500)
-  const enabled = !!debouncedName && regex.test(debouncedName)
+  const [targetDomain, setTargetDomain] = useState<string | undefined>(undefined)
+  // useEnsResolver();
 
-  const { data, isLoading, signMessage, variables } = useSignMessage()
 
-  const nameData: WorkerRequest['signature']['message'] = {
-    name: `${debouncedName}.offchaindemo.eth`,
-    owner: address!,
-    // https://docs.ens.domains/web/resolution#multi-chain
-    addresses: {
-      '60': address,
-      '2147492101': baseAddress,
-      '2147525809': arbAddress,
-    },
-    texts: { description },
-  }
 
-  const requestBody: WorkerRequest = {
-    signature: {
-      hash: data!,
-      message: nameData,
-    },
-    expiration: new Date().getTime() + 60 * 60, // 1 hour
-  }
+  // const { data: ensTextTarget, isLoading: isEnsTextTargetLoading, refetch } = useEnsText({
+  //   key: 'encryptedHash',
+  //   chainId: sepolia.id,
+  //   name: targetDomain,
+  //   query: {
+  //     enabled: false
+  //   }
+  // });
 
-  const {
-    data: gatewayData,
-    error: gatewayError,
-    isLoading: gatewayIsLoading,
-  } = useFetch(data && 'https://ens-gateway.gregskril.workers.dev/set', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
+
+  const { data: name, isFetched } = useEnsName({
+    address,
+    chainId: sepolia.id,
+
   })
+
+
+  const { addWhietlist } = useAddWhitelist({
+    address,
+    name
+  });
+
+  const { data: signMessageData, signMessage, variables } = useSignMessage()
+
+  const { auth } = useAuth(address);
+
+  // const nameData: WorkerRequest['signature']['message'] = {
+  //   name: `${debouncedName}.offchaindemo.eth`,
+  // }
+
+  // const requestBody: WorkerRequest = {
+  //   signature: {
+  //     hash: signMessageData!,
+  //     message: nameData,
+  //   },
+  //   expiration: new Date().getTime() + 60 * 60, // 1 hour
+  // }
+
+  const createSelect = (targetDomain: string) => () => {
+    setTargetDomain(targetDomain);
+  }
+
+  const items: DropdownItem[] = [
+    {
+      label: 'preview1.eth24sg.eth',
+      value: 'preview1.eth24sg.eth',
+      onClick: createSelect('preview1.eth24sg.eth'),
+      color: 'text',
+    },
+    {
+      label: 'preview2.eth24sg.eth',
+      value: 'preview2.eth24sg.eth',
+      onClick: createSelect('preview2.eth24sg.eth'),
+      color: 'red',
+    },
+  ]
 
   return (
     <>
       <Head>
-        <title>Offchain ENS Registrar</title>
-        <meta property="og:title" content="Offchain ENS Registrar" />
+        <title>Onchain ENS TXT with Offchain Whitelist gating</title>
+        <meta property="og:title" content=">Onchain ENS TXT with Offchain Whitelist gating" />
         <meta
           name="description"
           content="Quick demo of how offchain ENS names work"
@@ -76,61 +101,56 @@ export default function App() {
       <Card>
         <ConnectButton showBalance={false} />
 
+        <Dropdown
+          align="left"
+          width='250px'
+          items={items}
+          label={targetDomain || "Select Target"}
+        />
+
+        <Button
+          disabled={!targetDomain || !isConnected}
+          onClick={() => {
+            auth();
+          }}
+        >
+          Sign SIWE
+        </Button>
+
+        <hr />
         <Form
           onSubmit={(e) => {
             e.preventDefault()
-            signMessage({ message: JSON.stringify(nameData) })
+            if (address) {
+              addWhietlist();
+
+            }
+
+            // signMessage({ message: JSON.stringify(nameData) })
           }}
         >
-          <Input
-            type="text"
-            label="Name"
-            suffix=".offchaindemo.eth"
-            placeholder="ens"
-            required
-            disabled={!!data || !address}
-            onChange={(e) => setName(e.target.value)}
-          />
 
-          <Input
-            type="text"
-            label="Description"
-            placeholder="Your portable web3 profile"
-            disabled={!!data || !address}
-            onChange={(e) => setDescription(e.target.value)}
-          />
 
-          <Input
-            type="text"
-            label="ETH Address"
-            defaultValue={address}
-            disabled
-          />
 
-          <Input
-            type="text"
-            label="Base Address"
-            defaultValue={address}
-            disabled={!!data || !address}
-            onChange={(e) => setBaseAddress(e.target.value)}
-          />
+          <a href={"/redirect?target=" + targetDomain} target="_blank">
+            <Button
+              disabled={!targetDomain || !isConnected}
+            >
+              Take me there
+            </Button>
+          </a>
 
-          <Input
-            type="text"
-            label="Arb Address"
-            defaultValue={address}
-            disabled={!!data || !address}
-            onChange={(e) => setArbAddress(e.target.value)}
-          />
 
           <Button
             type="submit"
-            disabled={!enabled || !!data}
-            loading={isLoading || gatewayIsLoading}
+            disabled={!targetDomain || !isConnected}
           >
-            Register
+            Add yourself to whitelist
           </Button>
+
         </Form>
+        {/* 
+
 
         {gatewayError ? (
           <Helper type="error">
@@ -150,8 +170,8 @@ export default function App() {
           </Helper>
         ) : !!debouncedName && !enabled ? (
           <Helper type="error">Name must be lowercase alphanumeric</Helper>
-        ) : null}
-      </Card>
+        ) : null} */}
+      </Card >
 
       <Footer />
     </>
